@@ -1,0 +1,20 @@
+GET https://randomuser.me/api/
+
+# Auth Route
+POST /api/auth/login
+POST /api/auth/register
+
+# User Route [Token Required]
+POST /api/users
+GET  /api/users/:email  # get user Info
+GET  /api/users/:email/projects # get all user project
+PATCH /api/users/:email # update user
+
+# POST Route [Token Required]
+POST /api/projects      # create projects
+GET /api/projects       # get all projects
+GET /api/projects/:id   # get project by id
+PATCH  /api/projects/:id   # update project
+
+# Comment Route [Token Required]
+POST /api/comment/:postId # comment the post

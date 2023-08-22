@@ -1,4 +1,4 @@
-# Node TS Express and Prisma
+# Retro PGF Backend
 
 This Repository is a boilerplate to build a RESTful API with Express.js and Prisma using [TypeScript](https://www.typescriptlang.org/) and [pnpm](pnpm.io) for package management
 
@@ -34,14 +34,6 @@ pnpm db:generate
 pnpm db:migrate
 ```
 
-### 🚚 Using Docker
-
-- Starting
-
-```bash
-docker compose up -d
-```
-
 ## Folder Structure
 
 ```md
@@ -59,7 +51,7 @@ docker compose up -d
 │ │ ├── index.ts
 │ │ └── user.route.ts
 │ ├── 📂types/
-│ │ ├── express/
+│ │ ├── 📂express/
 │ │ │ └── index.ts
 │ │ └── index.ts
 │ └── server.ts

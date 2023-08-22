@@ -8,9 +8,50 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
-  userName  String?
-  firstName String?
-  lastName  String?
+  id         String    @id @default(nanoid())
+  email      String    @unique
+  user_name  String?
+  first_name String?
+  last_name  String?
+  Project    Project[]
+  Comment    Comment[]
+  Like       Like[]
+}
+
+model Project {
+  id              String    @id @default(nanoid())
+  name            String
+  logo_url        String?
+  banner_url      String?
+  website_url     String?
+  crypto_category String
+  description     String?
+  reason          String?
+  category        String
+  contact         String?
+  create_by       String
+  user            User      @relation(fields: [create_by], references: [id])
+  Comment         Comment[]
+  create_at       DateTime  @default(now())
+  Like            Like[]
+}
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  title      String?
+  content    String?
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id])
+  project_id String
+  project    Project  @relation(fields: [project_id], references: [id])
+  create_at  DateTime @default(now())
+}
+
+model Like {
+  id         Int      @id @default(autoincrement())
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id])
+  project_id String
+  project    Project  @relation(fields: [project_id], references: [id])
+  create_at  DateTime @default(now())
 }
