@@ -1,4 +1,5 @@
 import { Project } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
 // import * as userService from "@/services/project.service";
 
@@ -21,6 +22,12 @@ export const Create = async (req: Request, res: Response) => {
     res.status(201).send({ success: true });
   } catch (error) {
     console.log(error);
+    // handle error prisma
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2003") {
+        res.status(500).send({ success: false, message: "user id not found" });
+      }
+    }
     res.status(500).send({ success: false });
   }
 };
