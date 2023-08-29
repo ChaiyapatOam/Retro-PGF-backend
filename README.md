@@ -26,12 +26,8 @@ pnpm start
 - To work with prisma
 
 ```bash
-# prisma db push
-pnpm db:push
-# prisma generate
-pnpm db:generate
-# prisma migrate dev
-pnpm db:migrate
+npx prisma generate
+npx prisma migrate dev
 ```
 
 ## Folder Structure

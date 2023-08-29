@@ -1,26 +1,42 @@
 import { User } from "@/lib/prisma";
-// import * as userService from "@/service/user.service";
+import * as userService from "@/service/user.service";
 import { Request, Response } from "express";
 
-export const Create = async (req: Request, res: Response) => {
+export const Login = async (req: Request, res: Response) => {
   try {
-    await User.create({
-      data: req.body,
-    });
+    const idToken = req.headers["id-token"] as string;
+    if (idToken !== undefined) {
+      const decodedToken = await userService.validateIDToken(idToken);
+      const user = await userService.findUser(decodedToken.email as string);
 
-    res.status(201).send({ success: true });
+      if (!user) {
+        await userService.create(decodedToken);
+        const token = userService.generateToken(decodedToken.email as string);
+        res.status(201).send({
+          success: true,
+          message: "User Created",
+          accessToken: token,
+        });
+      } else {
+        const token = userService.generateToken(decodedToken.email as string);
+        res.status(200).send({
+          success: true,
+          message: "Authenthicated",
+          accessToken: token,
+        });
+      }
+    } else {
+      res.status(403).send({ success: false, message: "No id-token Provide" });
+    }
   } catch (error) {
-    res.status(500).send({ success: false });
+    // console.log(error);
+    res.status(500).send({ success: false, message: "Cant validate id-token" });
   }
 };
 
 export const FindUserByEmail = async (req: Request, res: Response) => {
   try {
-    const user = await User.findUnique({
-      where: {
-        email: req.params.email,
-      },
-    });
+    const user = await userService.findUser(req.email);
 
     if (!user) {
       res.status(404).send("user not found");
@@ -35,7 +51,7 @@ export const FindUserByEmail = async (req: Request, res: Response) => {
 export const UpdateUser = async (req: Request, res: Response) => {
   const user = await User.update({
     where: {
-      email: req.params.email,
+      email: req.email,
     },
     data: req.body,
   });
@@ -47,7 +63,7 @@ export const GetAllProject = async (req: Request, res: Response) => {
   try {
     const user = await User.findUnique({
       where: {
-        email: req.params.email,
+        email: req.email,
       },
       include: {
         Project: true,

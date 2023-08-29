@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from "express";
+import admin from "firebase-admin";
 import helmet from "helmet";
 import cors from "cors";
 
@@ -10,6 +11,11 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+admin.initializeApp({
+  credential: admin.credential.cert(require("@/config/retropgf-hub-secret.json")),
+  storageBucket: "retropgf-hub.appspot.com",
+});
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express TypeScript Server is Running");

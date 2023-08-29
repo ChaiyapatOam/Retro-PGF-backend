@@ -7,15 +7,16 @@ import {
   getProjectByIdSchema,
   updateProjectSchema,
 } from "@/lib/zodSchema/projectSchema";
+import { authJwt } from "@/middleware/auth";
 
 router
   .route("/")
   .get(projectController.GetAll)
-  .post(validateZod(createProjectSchema), projectController.Create);
+  .post(authJwt, validateZod(createProjectSchema), projectController.Create);
 
 router
   .route("/:id")
   .get(validateZod(getProjectByIdSchema), projectController.FindProjectById)
-  .patch(validateZod(updateProjectSchema));
+  .patch(authJwt, validateZod(updateProjectSchema), projectController.Update);
 
 export const projectRoute: Router = router;

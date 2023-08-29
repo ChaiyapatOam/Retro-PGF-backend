@@ -2,21 +2,16 @@ import express, { Express, Router } from "express";
 const router: Router = express.Router();
 import * as userController from "@/controller/user.controller";
 import { validateZod } from "@/lib/validateZod";
-import {
-  createUserSchema,
-  findUserSchema,
-  updateUserSchema,
-} from "@/lib/zodSchema/userSchema";
+import { updateUserSchema } from "@/lib/zodSchema/userSchema";
+import { authJwt } from "@/middleware/auth";
 
-router.route("/").post(validateZod(createUserSchema), userController.Create);
+router.route("/login").post(userController.Login);
 
 router
-  .route("/:email")
-  .get(validateZod(findUserSchema), userController.FindUserByEmail)
-  .patch(validateZod(updateUserSchema), userController.UpdateUser);
+  .route("/")
+  .get(authJwt, userController.FindUserByEmail)
+  .patch(authJwt, validateZod(updateUserSchema), userController.UpdateUser);
 
-router
-  .route("/:email/projects")
-  .get(validateZod(findUserSchema), userController.GetAllProject);
+router.route("/projects").get(authJwt, userController.GetAllProject);
 
 export const userRoute: Router = router;

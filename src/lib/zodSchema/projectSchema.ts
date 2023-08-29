@@ -9,15 +9,14 @@ export const getProjectByIdSchema = z.object({
 export const createProjectSchema = z.object({
   body: z.object({
     name: z.string().min(2),
-    logo_url: z.string().optional(),
-    banner_url: z.string().optional(),
-    website_url: z.string().optional(),
+    logo_url: z.string().optional(), //Change to url
+    banner_url: z.string().optional(), //Change to url
+    website_url: z.string().optional(), //Change to url
     crypto_category: z.string().optional(),
     description: z.string().min(2),
     reason: z.string().min(2),
     category: z.string().min(2),
-    contact: z.string().min(2), 
-    create_by: z.string().min(10),
+    contact: z.string().min(2),
   }),
 });
 
@@ -26,15 +25,14 @@ export const updateProjectSchema = z.object({
     id: z.string().min(10),
   }),
   body: z.object({
-    name: z.string().min(2),
-    logo_url: z.string().min(2),
-    banner_url: z.string().min(2),
-    website_url: z.string().min(2),
-    crypto_category: z.string().min(2),
+    name: z.string().optional(),
+    logo_url: z.string().optional(), //Change to url
+    banner_url: z.string().optional(), //Change to url
+    website_url: z.string().optional(), //Change to url
+    crypto_category: z.string().optional(),
     description: z.string().optional(),
     reason: z.string().optional(),
     category: z.string().optional(),
     contact: z.string().optional(),
-    create_by: z.string().min(10),
   }),
 });
