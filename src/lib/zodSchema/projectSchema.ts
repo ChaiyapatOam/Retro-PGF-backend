@@ -36,3 +36,13 @@ export const updateProjectSchema = z.object({
     contact: z.string().optional(),
   }),
 });
+
+export const commentProjectSchema = z.object({
+  params: z.object({
+    id: z.string().min(10),
+  }),
+  body: z.object({
+    title: z.string().min(1),
+    content: z.string().optional(),
+  }),
+});

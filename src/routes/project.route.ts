@@ -3,6 +3,7 @@ const router: Router = express.Router();
 import * as projectController from "@/controller/project.controller";
 import { validateZod } from "@/lib/validateZod";
 import {
+  commentProjectSchema,
   createProjectSchema,
   getProjectByIdSchema,
   updateProjectSchema,
@@ -18,5 +19,25 @@ router
   .route("/:id")
   .get(validateZod(getProjectByIdSchema), projectController.FindProjectById)
   .patch(authJwt, validateZod(updateProjectSchema), projectController.Update);
+
+router
+  .route("/:id/comment")
+  .post(
+    authJwt,
+    validateZod(commentProjectSchema),
+    projectController.CommentProject
+  );
+
+router
+  .route("/:id/comment/:commentId")
+  .patch(
+    authJwt,
+    validateZod(commentProjectSchema),
+    projectController.UpdateCommentProject
+  );
+
+router.route("/:id/like").post(authJwt, projectController.LikeProject);
+
+// router.route("/:id/unlike").post(authJwt, projectController.UnLikeProject);
 
 export const projectRoute: Router = router;

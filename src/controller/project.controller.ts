@@ -1,4 +1,4 @@
-import { Project } from "@/lib/prisma";
+import { Project, Comment, Like } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
 import * as userService from "@/service/user.service";
@@ -56,6 +56,7 @@ export const FindProjectById = async (req: Request, res: Response) => {
         Like: true,
         Comment: true,
         user: true,
+        _count: true,
       },
     });
 
@@ -84,3 +85,89 @@ export const Update = async (req: Request, res: Response) => {
     res.status(500).send({ success: false });
   }
 };
+
+export const CommentProject = async (req: Request, res: Response) => {
+  try {
+    const user = await userService.findUser(req.email);
+    if (!user) {
+      throw new Error("No User Found");
+    }
+    const comment = await Comment.create({
+      data: {
+        title: req.body.title,
+        content: req.body.content,
+        project_id: req.params.id,
+        user_id: user.id,
+      },
+    });
+
+    res.status(201).send({ success: true, message: comment });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ success: false });
+  }
+};
+
+export const UpdateCommentProject = async (req: Request, res: Response) => {
+  try {
+    const user = await userService.findUser(req.email);
+    if (!user) {
+      throw new Error("No User Found");
+    }
+    const comment = await Comment.update({
+      where: {
+        id: parseInt(req.params.commentId),
+      },
+      data: {
+        title: req.body.title,
+        content: req.body.content,
+        project_id: req.params.id,
+        user_id: user.id,
+      },
+    });
+
+    res.status(201).send({ success: true, message: comment });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ success: false });
+  }
+};
+
+export const LikeProject = async (req: Request, res: Response) => {
+  try {
+    const user = await userService.findUser(req.email);
+    if (!user) {
+      throw new Error("No User Found");
+    }
+    const like = await Like.create({
+      data: {
+        project_id: req.params.id,
+        user_id: user.id,
+      },
+    });
+
+    res.status(201).send({ success: true, message: like });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ success: false });
+  }
+};
+// export const UnLikeProject = async (req: Request, res: Response) => {
+//   try {
+//     const user = await userService.findUser(req.email);
+//     if (!user) {
+//       throw new Error("No User Found");
+//     }
+//     const like = await Like.create({
+//       data: {
+//         project_id: req.params.id,
+//         user_id: user.id,
+//       },
+//     });
+
+//     res.status(201).send({ success: true, message: like });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({ success: false });
+//   }
+// };
