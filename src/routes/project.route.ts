@@ -18,7 +18,8 @@ router
 router
   .route("/:id")
   .get(validateZod(getProjectByIdSchema), projectController.FindProjectById)
-  .patch(authJwt, validateZod(updateProjectSchema), projectController.Update);
+  .patch(authJwt, validateZod(updateProjectSchema), projectController.Update)
+  .delete(authJwt,projectController.Delete)
 
 router
   .route("/:id/comment")

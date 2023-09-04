@@ -5,7 +5,18 @@ import * as userService from "@/service/user.service";
 
 export const GetAll = async (req: Request, res: Response) => {
   try {
-    const projects = await Project.findMany({ include: { _count: true } });
+    const projects = await Project.findMany({
+      select: {
+        id: true,
+        name: true,
+        logo_url: true,
+        description: true,
+        crypto_category: true,
+        category: true,
+        _count: true
+      },
+    })
+
     res.status(201).send({ success: true, data: projects });
   } catch (error) {
     res.status(500).send({ success: false });
@@ -80,6 +91,21 @@ export const Update = async (req: Request, res: Response) => {
     });
 
     res.status(201).send({ success: true, message: project });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ success: false });
+  }
+};
+
+export const Delete = async (req: Request, res: Response) => {
+  try {
+    await Project.delete({
+      where: {
+        id: req.params.id,
+      }
+    });
+
+    res.status(200).send({ success: true, message: "Deleted" });
   } catch (error) {
     console.log(error);
     res.status(500).send({ success: false });

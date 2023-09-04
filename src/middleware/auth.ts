@@ -13,7 +13,7 @@ export const authJwt = (req: Request, res: Response, next: NextFunction) => {
   if (!secret) {
     throw new Error("Please Define JWT_SECRET");
   }
-  let token = req.headers["access-token"] as string;
+  let token = req.cookies.ssid
 
   if (!token) {
     return res.status(403).send({

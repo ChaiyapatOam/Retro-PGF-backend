@@ -12,24 +12,21 @@ export const Login = async (req: Request, res: Response) => {
       if (!user) {
         await userService.create(decodedToken);
         const token = userService.generateToken(decodedToken.email as string);
+        res.cookie("ssid", token, { httpOnly: true, secure: true, sameSite: "lax", path: "/" })
         res.status(201).send({
           success: true,
           message: "User Created",
-          accessToken: token,
         });
       } else {
         const token = userService.generateToken(decodedToken.email as string);
-        res.status(200).send({
-          success: true,
-          message: "Authenthicated",
-          accessToken: token,
-        });
+        res.cookie("ssid", token, { httpOnly: true, secure: true, sameSite: "lax", path: "/" })
+        res.status(200).send({ success: true })
       }
     } else {
       res.status(403).send({ success: false, message: "No id-token Provide" });
     }
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     res.status(500).send({ success: false, message: "Cant validate id-token" });
   }
 };
