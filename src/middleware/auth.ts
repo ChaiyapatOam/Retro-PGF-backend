@@ -1,18 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import * as sessionService from "@/service/session.service";
+import * as jwtService from "@/service/jwt.service";
 
-export const secret = process.env.JWT_SECRET;
+export const authJwt = async (req: Request, res: Response, next: NextFunction) => {
 
-interface customPayload extends JwtPayload {
-  email: string;
-  exp?: number | undefined;
-  iat?: number | undefined;
-}
-
-export const authJwt = (req: Request, res: Response, next: NextFunction) => {
-  if (!secret) {
-    throw new Error("Please Define JWT_SECRET");
-  }
   let token = req.cookies.ssid
 
   if (!token) {
@@ -20,13 +11,27 @@ export const authJwt = (req: Request, res: Response, next: NextFunction) => {
       message: "No Token provided!",
     });
   }
-  const decoded = jwt.verify(token, secret) as customPayload;
-  req.email = decoded.email;
 
-  if (!decoded) {
-    return res.status(401).send({
-      message: "Unauthorized!",
-    });
+  try {
+    const decoded = jwtService.Validate(token);
+    if (!decoded) {
+      return res.status(401).send({
+        message: "Unauthorized!",
+      });
+    }
+
+    req.email = decoded.email;
+    req.uuid = decoded.uuid;
+
+    const session = await sessionService.Validate(decoded.uuid)
+    if (!session) {
+      return res.status(401).send({
+        message: "Unauthorized!",
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
+
   next();
 };

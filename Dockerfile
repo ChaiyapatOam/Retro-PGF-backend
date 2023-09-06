@@ -3,6 +3,10 @@ RUN npm i -g pnpm
 COPY . /app
 WORKDIR /app
 
+# Set timezone
+RUN apk add tzdata
+ENV TZ Asia/Bangkok
+
 FROM node AS prod-deps
 RUN pnpm install --prod --frozen-lockfile
 RUN npx prisma generate

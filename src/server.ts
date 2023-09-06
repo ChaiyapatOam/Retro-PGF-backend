@@ -21,8 +21,6 @@ admin.initializeApp({
 });
 
 app.get("/", (req: Request, res: Response) => {
-  console.log("Cookie: ", req.cookies);
-
   res.send("Express TypeScript Server is Running");
 });
 

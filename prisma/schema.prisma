@@ -7,9 +7,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Session {
+  id         String   @unique
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id])
+  create_at  DateTime @default(now())
+  expires_at DateTime
+}
+
 model User {
   id         String    @id @default(nanoid())
-  email      String?    @unique
+  email      String?   @unique
   profile    String?
   user_name  String?
   first_name String?
@@ -17,6 +25,7 @@ model User {
   Project    Project[]
   Comment    Comment[]
   Like       Like[]
+  Session    Session[]
 }
 
 model Project {
