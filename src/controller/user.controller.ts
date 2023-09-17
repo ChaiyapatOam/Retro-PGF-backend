@@ -32,7 +32,7 @@ export const Login = async (req: Request, res: Response) => {
       res.status(403).send({ success: false, message: "No id-token Provide" });
     }
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     res.status(500).send({ success: false, message: "Cant validate id-token" });
   }
 };

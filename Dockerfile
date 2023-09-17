@@ -12,7 +12,7 @@ RUN pnpm install --prod --frozen-lockfile
 RUN npx prisma generate
 
 FROM node AS build
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 RUN pnpm run build
 
 FROM node
