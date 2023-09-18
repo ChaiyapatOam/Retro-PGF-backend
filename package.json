@@ -7,9 +7,7 @@
   "scripts": {
     "build": "npx tsc && npx tsc-alias",
     "start": "node ./dist/server.js",
-    "dev": "npx ts-node-dev -r tsconfig-paths/register src/server.ts",
-    "db:generate": "npx prisma generate",
-    "preinstall": "npx only-allow pnpm"
+    "dev": "npx ts-node-dev -r tsconfig-paths/register src/server.ts"
   },
   "keywords": [],
   "license": "ISC",

@@ -1,26 +1,26 @@
 # Retro PGF Backend
 
-This Repository is a boilerplate to build a RESTful API with Express.js and Prisma using [TypeScript](https://www.typescriptlang.org/) and [pnpm](pnpm.io) for package management
+This Repository is a boilerplate to build a RESTful API with Express.js and Prisma 
 
 ## Usage
 
 - To install package
 
 ```bash
-pnpm install
+npm install
 ```
 
 - To start development
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
 - To start production
 
 ```bash
-pnpm build
-pnpm start
+npm run build
+npm run start
 ```
 
 - To work with prisma
