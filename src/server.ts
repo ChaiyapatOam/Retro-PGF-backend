@@ -6,7 +6,7 @@ import helmet from "helmet";
 import cors from "cors";
 
 import { indexRouter } from "@/routes";
-import firebaseConfig from "@/config/firebase-config.json"
+import firebaseConfig from "./config/firebase-config.json"
 const app: Express = express();
 const port = process.env.PORT || 8080;
 
