@@ -21,7 +21,7 @@ export const Login = async (req: Request, res: Response) => {
         user = await userService.create(decodedToken);
         await sessionService.Create(user.id, uuid)
         // res.cookie("ssid", token, { httpOnly: true, secure: true, sameSite: "lax", path: "/" })
-        res.cookie("ssid", token, { httpOnly: true, expires: tomorrow, domain: "127.0.0.1" })
+        res.cookie("ssid", token, { httpOnly: true, expires: tomorrow, domain: "http://127.0.0.1:5173" })
         return res.status(201).send({
           success: true,
           message: "User Created",
