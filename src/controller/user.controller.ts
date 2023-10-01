@@ -21,7 +21,7 @@ export const Login = async (req: Request, res: Response) => {
         user = await userService.create(decodedToken);
         await sessionService.Create(user.id, uuid)
         // res.cookie("ssid", token, { httpOnly: true, secure: true, sameSite: "lax", path: "/" })
-        res.cookie("ssid", token, { httpOnly: true, expires: tomorrow, domain: "www.retropgfhub.com" })
+        res.cookie("ssid", token, { httpOnly: true, expires: tomorrow })
         return res.status(201).send({
           success: true,
           message: "User Created",
@@ -30,7 +30,7 @@ export const Login = async (req: Request, res: Response) => {
       else {
         await sessionService.Create(user.id, uuid)
         // res.cookie("ssid", token, { httpOnly: true, secure: true, sameSite: "lax", path: "/" })
-        res.cookie("ssid", token, { httpOnly: true, expires: tomorrow, domain: "www.retropgfhub.com" })
+        res.cookie("ssid", token, { httpOnly: true, expires: tomorrow })
         return res.status(200).send({ success: true })
       }
     } else {
