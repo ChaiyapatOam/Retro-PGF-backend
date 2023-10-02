@@ -11,7 +11,7 @@ const app: Express = express();
 const port = process.env.PORT || 8080;
 
 app.use(helmet());
-app.use(cors({ origin: "https://www.retropgfhub.com", credentials: true }));
+app.use(cors({ origin: "https://retropgfhub.com", credentials: true }));
 // app.use(cors({ origin: "", credentials: true }));
 
 app.use(express.json());
