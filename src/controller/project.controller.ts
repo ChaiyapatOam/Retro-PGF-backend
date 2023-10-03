@@ -165,35 +165,47 @@ export const LikeProject = async (req: Request, res: Response) => {
     if (!user) {
       throw new Error("No User Found");
     }
-    const like = await Like.create({
-      data: {
-        project_id: req.params.id,
+    const projectId = req.params.id
+
+    let like = await Like.findFirst({
+      where: {
+        project_id: projectId,
         user_id: user.id,
       },
     });
 
-    res.status(201).send({ success: true, message: like });
+    if (!like) {
+      like = await Like.create({
+        data: {
+          project_id: projectId,
+          user_id: user.id,
+        },
+      });
+    }
+
+    return res.status(201).send({ success: true });
   } catch (error) {
     console.log(error);
     res.status(500).send({ success: false });
   }
 };
-// export const UnLikeProject = async (req: Request, res: Response) => {
-//   try {
-//     const user = await userService.findUser(req.email);
-//     if (!user) {
-//       throw new Error("No User Found");
-//     }
-//     const like = await Like.create({
-//       data: {
-//         project_id: req.params.id,
-//         user_id: user.id,
-//       },
-//     });
 
-//     res.status(201).send({ success: true, message: like });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send({ success: false });
-//   }
-// };
+export const UnLikeProject = async (req: Request, res: Response) => {
+  try {
+    const user = await userService.findUser(req.email);
+    if (!user) {
+      throw new Error("No User Found");
+    }
+    await Like.deleteMany({
+      where: {
+        project_id: req.params.id,
+        user_id: user.id,
+      },
+    });
+
+    return res.status(200).send({ success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ success: false });
+  }
+};

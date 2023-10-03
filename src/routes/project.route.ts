@@ -19,7 +19,7 @@ router
   .route("/:id")
   .get(validateZod(getProjectByIdSchema), projectController.FindProjectById)
   .patch(authJwt, validateZod(updateProjectSchema), projectController.Update)
-  .delete(authJwt,projectController.Delete)
+  .delete(authJwt, projectController.Delete)
 
 router
   .route("/:id/comment")
@@ -39,6 +39,6 @@ router
 
 router.route("/:id/like").post(authJwt, projectController.LikeProject);
 
-// router.route("/:id/unlike").post(authJwt, projectController.UnLikeProject);
+router.route("/:id/unlike").post(authJwt, projectController.UnLikeProject);
 
 export const projectRoute: Router = router;
