@@ -134,7 +134,7 @@ export const CommentProject = async (req: Request, res: Response) => {
   }
 };
 
-export const UpdateCommentProject = async (req: Request, res: Response) => {
+export const UpdateComment = async (req: Request, res: Response) => {
   try {
     const user = await userService.findUser(req.email);
     if (!user) {
@@ -153,6 +153,21 @@ export const UpdateCommentProject = async (req: Request, res: Response) => {
     });
 
     res.status(201).send({ success: true, message: comment });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ success: false });
+  }
+};
+
+export const DeleteComment = async (req: Request, res: Response) => {
+  try {
+    await Comment.delete({
+      where: {
+        id: parseInt(req.params.commentId),
+      },
+    });
+
+    res.status(200).send({ success: true, message: "Deleted" });
   } catch (error) {
     console.log(error);
     res.status(500).send({ success: false });
