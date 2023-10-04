@@ -5,7 +5,15 @@ import * as userService from "@/service/user.service";
 
 export const GetAll = async (req: Request, res: Response) => {
   try {
+    const page = req.query.page as unknown as number || 1;
+    if (!page) {
+      return res.status(500).send({ success: false, message: "Error in Page" });
+    }
+
+    let max = page * 10;
     const projects = await Project.findMany({
+      skip: max - 10,
+      take: max,
       select: {
         id: true,
         name: true,
@@ -15,9 +23,12 @@ export const GetAll = async (req: Request, res: Response) => {
         category: true,
         _count: true
       },
+      orderBy: {
+        create_at: 'asc',
+      },
     })
 
-    res.status(201).send({ success: true, data: projects });
+    res.status(200).send({ success: true, data: projects });
   } catch (error) {
     res.status(500).send({ success: false });
   }
