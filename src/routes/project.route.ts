@@ -34,8 +34,9 @@ router
   .patch(
     authJwt,
     validateZod(commentProjectSchema),
-    projectController.UpdateCommentProject
-  );
+    projectController.UpdateComment
+  )
+  .delete(authJwt,projectController.DeleteComment)
 
 router.route("/:id/like").post(authJwt, projectController.LikeProject);
 
