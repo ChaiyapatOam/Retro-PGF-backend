@@ -1,4 +1,4 @@
-import { User } from "@/lib/prisma";
+import { Like, User } from "@/lib/prisma";
 import admin from "firebase-admin";
 import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 
@@ -13,12 +13,11 @@ export const validateIDToken = async (idToken: string) => {
   }
 };
 
-
 export const create = async (tokenData: DecodedIdToken) => {
   if (!tokenData) throw new Error("No Token Provide");
   const result = await User.create({
     data: {
-      email: tokenData.email,
+      email: tokenData.email as string,
       profile: tokenData.picture,
       user_name: tokenData.name,
     },
@@ -34,4 +33,18 @@ export const findUser = async (email: string) => {
     },
   });
   return user;
+};
+
+export const getLikeProject = async (email: string) => {
+  const user = await findUser(email);
+  if (!user) {
+    throw new Error("No User Found");
+  }
+  let like = await Like.findMany({
+    where: {
+      user_id: user.id,
+    },
+  });
+
+  return like;
 };

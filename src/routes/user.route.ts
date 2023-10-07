@@ -12,7 +12,8 @@ router
   .get(userController.GetUser)
   .patch(authJwt, validateZod(updateUserSchema), userController.UpdateUser);
 
-router.route("/logout").post(authJwt, userController.Logout)
+router.route("/favorites").get(authJwt, userController.GetAllFavorite);
+router.route("/logout").post(authJwt, userController.Logout);
 router.route("/projects").get(authJwt, userController.GetAllProject);
 
 export const userRoute: Router = router;
