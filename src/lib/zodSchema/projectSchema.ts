@@ -42,7 +42,7 @@ export const commentProjectSchema = z.object({
     id: z.string().min(10),
   }),
   body: z.object({
-    title: z.string().min(1),
-    content: z.string().optional(),
+    title: z.string().optional(),
+    content: z.string().min(1),
   }),
 });

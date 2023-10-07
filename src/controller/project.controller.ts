@@ -5,7 +5,7 @@ import * as userService from "@/service/user.service";
 
 export const GetAll = async (req: Request, res: Response) => {
   try {
-    const page = req.query.page as unknown as number || 1;
+    const page = (req.query.page as unknown as number) || 1;
     if (!page) {
       return res.status(500).send({ success: false, message: "Error in Page" });
     }
@@ -21,12 +21,12 @@ export const GetAll = async (req: Request, res: Response) => {
         description: true,
         crypto_category: true,
         category: true,
-        _count: true
+        _count: true,
       },
       orderBy: {
-        create_at: 'asc',
+        create_at: "asc",
       },
-    })
+    });
 
     res.status(200).send({ success: true, data: projects });
   } catch (error) {
@@ -76,7 +76,9 @@ export const FindProjectById = async (req: Request, res: Response) => {
       },
       include: {
         Like: true,
-        Comment: true,
+        Comment: {
+          include: { user: true },
+        },
         user: true,
         _count: true,
       },
@@ -94,9 +96,14 @@ export const FindProjectById = async (req: Request, res: Response) => {
 
 export const Update = async (req: Request, res: Response) => {
   try {
+    const user = await userService.findUser(req.email);
+    if (!user) {
+      throw new Error("No User Found");
+    }
     const project = await Project.update({
       where: {
         id: req.params.id,
+        create_by: user.id,
       },
       data: req.body,
     });
@@ -110,10 +117,15 @@ export const Update = async (req: Request, res: Response) => {
 
 export const Delete = async (req: Request, res: Response) => {
   try {
+    const user = await userService.findUser(req.email);
+    if (!user) {
+      throw new Error("No User Found");
+    }
     await Project.delete({
       where: {
         id: req.params.id,
-      }
+        create_by: user.id,
+      },
     });
 
     res.status(200).send({ success: true, message: "Deleted" });
@@ -172,9 +184,14 @@ export const UpdateComment = async (req: Request, res: Response) => {
 
 export const DeleteComment = async (req: Request, res: Response) => {
   try {
+    const user = await userService.findUser(req.email);
+    if (!user) {
+      throw new Error("No User Found");
+    }
     await Comment.delete({
       where: {
         id: parseInt(req.params.commentId),
+        user_id: user.id,
       },
     });
 
@@ -191,7 +208,7 @@ export const LikeProject = async (req: Request, res: Response) => {
     if (!user) {
       throw new Error("No User Found");
     }
-    const projectId = req.params.id
+    const projectId = req.params.id;
 
     let like = await Like.findFirst({
       where: {
