@@ -17,7 +17,7 @@ model Session {
 
 model User {
   id         String    @id @default(nanoid())
-  email      String   @unique
+  email      String    @unique
   profile    String?
   user_name  String?
   first_name String?
@@ -35,8 +35,8 @@ model Project {
   banner_url      String?
   website_url     String?
   crypto_category String
-  description     String?
-  reason          String?
+  description     String?   @db.Text
+  reason          String?   @db.Text
   category        String
   contact         String?
   create_by       String
